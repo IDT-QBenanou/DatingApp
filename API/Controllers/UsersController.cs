@@ -15,11 +15,9 @@ public class UsersController(IUserRepository userRepository, IMapper mapper) : B
     public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
     {
         // var users = await context.Users.ToListAsync();
-        var users = await userRepository.GetUsersAsync();
+        var users = await userRepository.GetMembersAsync();
 
-        var usersToReturn = mapper.Map<IEnumerable<MemberDto>>(users);
-
-        return Ok(usersToReturn);
+        return Ok(users);
     }
 
     [HttpGet("{username}")]
