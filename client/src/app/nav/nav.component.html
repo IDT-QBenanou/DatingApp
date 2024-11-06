@@ -1,31 +1,35 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container">
-      <a class="navbar-brand" routerLink="/" routerLinkActive="active">Dating App</a>
+      <a class="navbar-brand" routerLink="/" routerLinkActive="active">Pingeur</a>
 
         @if(accountService.currentUser()) {
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <li class="nav-item">
-                    <a routerLink="/members" routerLinkActive="active" class="nav-link">Matches</a>
+                    <a routerLink="/members" routerLinkActive="active" class="nav-link">Rencontres</a>
                 </li>
                 <li class="nav-item">
-                    <a routerLink="/list" routerLinkActive="active" class="nav-link">Lists</a>
+                    <a routerLink="/list" routerLinkActive="active" class="nav-link">Liste</a>
                 </li>
                 <li class="nav-item">
                     <a routerLink="/messages" routerLinkActive="active" class="nav-link">Messages</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" (click)="logout()">Logout</a>
+                    <a class="nav-link" (click)="logout()">Deconnexion</a>
                 </li>
+                <li class="nav-item">
+                    <a routerLink="/errors" routerLinkActive="active" class="nav-link">Error</a>
+                </li>
+
             </ul>
 
             <div dropdown class="dropdown">
                 <a dropdownToggle class="dropdown-toggle text-light">
-                    Welcome {{accountService.currentUser()?.username | titlecase}}
+                    Bonjour {{accountService.currentUser()?.username | titlecase}}
                 </a>
                 <div *dropdownMenu class="dropdown-menu">
-                    <a class="dropdown-item">Profile</a>
-                    <a class="dropdown-item">Edit Profile</a>
-                    <a class="dropdown-item" (click)="logout()">Logout</a>
+                    <a class="dropdown-item">Profil</a>
+                    <a class="dropdown-item">Modifier mon Profil</a>
+                    <a class="dropdown-item" (click)="logout()">Deconnexion</a>
                 </div>
             </div>
         } @else {
@@ -44,7 +48,7 @@
                 placeholder="Password" 
                 type="password">
       
-                <button class="btn btn-outline-success" type="submit">Login</button>
+                <button class="btn btn-outline-success" type="submit">Connexion</button>
               </form>
         }
        
