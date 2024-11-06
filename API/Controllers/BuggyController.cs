@@ -23,17 +23,25 @@ public class BuggyController(DataContext context) : BaseApiController
     [HttpGet("server-error")]
     public ActionResult<string> GetServerError()
     {
-        try{
-            var thing = context.Users.Find(-1) ?? throw new Exception("bad thing happened");
+        var thing = context.Users.Find(-1) ?? throw new Exception("bad thing happened");
 
             var thingToReturn = thing.ToString();
 
+            if(thingToReturn == null) return NotFound();
+
             return thingToReturn;
-        }
-        catch(Exception ex)
-        {
-            return StatusCode(500, "Computer says no!");
-        }
+
+        // try{
+        //     var thing = context.Users.Find(-1) ?? throw new Exception("bad thing happened");
+
+        //     var thingToReturn = thing.ToString();
+
+        //     return thingToReturn;
+        // }
+        // catch(Exception ex)
+        // {
+        //     return StatusCode(500, "Computer says no!");
+        // }
         
     }
 
