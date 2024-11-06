@@ -17,21 +17,28 @@ public class AccountController(DataContext context, ITokenService tokenService) 
 
         using var hmac = new HMACSHA512();
 
-        var user = new AppUser
-        {
-            UserName = registerDto.Username,
-            PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-            PasswordSalt = hmac.Key
-        };
+        return Ok();
+        // var user = new AppUser
+        // {
+        //     UserName = registerDto.Username,
+        //     // KnownAs = registerDto.KnownAs,
+        //     // Gender = registerDto.Gender,
+        //     // City = registerDto.City,
+        //     // Country = registerDto.Country
 
-        context.Users.Add(user);
-        await context.SaveChangesAsync();
+        //     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
+        //     PasswordSalt = hmac.Key,
+            
+        // };
 
-        return new UserDto
-        {
-            Username = user.UserName,
-            Token = tokenService.CreateToken(user)
-        };
+        // context.Users.Add(user);
+        // await context.SaveChangesAsync();
+
+        // return new UserDto
+        // {
+        //     Username = user.UserName,
+        //     Token = tokenService.CreateToken(user)
+        // };
     }
 
     [HttpPost("login")]
