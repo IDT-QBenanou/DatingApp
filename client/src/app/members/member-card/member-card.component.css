@@ -1,0 +1,28 @@
+.member-icons {
+    margin-top: 0px;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.card-img-wrapper:hover .member-icons {
+    margin-top: -50px;
+    opacity: 1;
+}
+
+.card-img-wrapper {
+    overflow: hidden;;
+}
+
+.card-img-wrapper img {
+    transform: scale(1.2);
+    transition: all 0.3s ease-in-out;
+}
+
+.card-img-wrapper:hover img {
+    transform: scale(1);
+}
