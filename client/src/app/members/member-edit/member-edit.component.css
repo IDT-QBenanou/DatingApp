@@ -1,0 +1,13 @@
+.button_submit {
+    margin: 30px auto;
+    display: block;
+}
+
+.alert-warning {
+    display: inline-block;
+    padding: 10px 20px;
+}
+
+.alert-warning p {
+    margin: 0 auto;
+}
