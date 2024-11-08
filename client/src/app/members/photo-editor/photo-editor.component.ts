@@ -53,13 +53,19 @@ export class PhotoEditorComponent implements OnInit {
           this.accountService.setCurrentUser(user);
         }
         const updateMember = {...this.member()};
-        updateMember.photoUrl = photo.url;
-        updateMember.photos.forEach(p => {
-          p.isMain = p.id === photo.id ? true : false;
-        });
-        this.memberChange.emit(updateMember);
+        
+        this.updateMainPhotoOnMember(updateMember, photo);
       }
     });
+  }
+
+  updateMainPhotoOnMember(updateMember: Member, photo: Photo) {
+    updateMember.photoUrl = photo.url;
+    updateMember.photos.forEach(p => {
+      p.isMain = p.id === photo.id ? true : false;
+    });
+    this.memberChange.emit(updateMember);
+    
   }
 
   initializeUploader() {
@@ -81,6 +87,14 @@ export class PhotoEditorComponent implements OnInit {
         const updateMember = {...this.member()};
         updateMember.photos.push(photo);
         this.memberChange.emit(updateMember);
+        if(photo.isMain) {
+          const user = this.accountService.currentUser();
+          if(user) {
+            user.photoUrl = photo.url;
+            this.accountService.setCurrentUser(user);
+          }
+          this.updateMainPhotoOnMember(updateMember, photo);
+        }
 
         // if(photo.isMain) {
         //   this.accountService.setCurrentUser(this.member);

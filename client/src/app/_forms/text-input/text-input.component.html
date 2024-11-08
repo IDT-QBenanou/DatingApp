@@ -1,0 +1,11 @@
+<div class="mb-3 form-floating">
+    <input 
+    [class.is-invalid]="control.touched && control.invalid"
+    [type]="type()"
+    class="form-control"
+    placeholder="{{label()}}" 
+    [formControl]="control"
+    required="{{required()}}">
+    <label>{{label()}}</label>
+    <div class="invalid-feedback">{{alert()}}</div>
+</div>
