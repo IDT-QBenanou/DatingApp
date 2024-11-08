@@ -8,3 +8,11 @@
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
 }
+
+img {
+    max-height: 50px;
+    border: 2px solid #fff;
+    border-radius: 100px;
+    display: inline;
+    margin: 10px;
+}

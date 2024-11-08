@@ -31,27 +31,12 @@ export class MemberDetailComponent implements OnInit {
       next: member => {
         this.member = member;
 
-        // START-- Duplicata d'images pour remplir la galerie
         member.photos.map(photo => {
           this.images.push(new ImageItem({
             src: photo?.url,
             thumb: photo?.url
           }));
         });
-        member.photos.map(photo => {
-          this.images.push(new ImageItem({
-            src: photo?.url,
-            thumb: photo?.url
-          }));
-        });
-        member.photos.map(photo => {
-          this.images.push(new ImageItem({
-            src: photo?.url,
-            thumb: photo?.url
-          }));
-        });
-        // END -- Duplicata d'images pour remplir la galerie
-
 
       }
     });

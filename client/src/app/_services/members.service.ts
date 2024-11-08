@@ -25,6 +25,8 @@ export class MembersService {
         this.members.set(members);
       }});
 
+      
+
   }
 
   getMember(username: string) {
@@ -42,6 +44,16 @@ export class MembersService {
         this.members.update(members => members.map(m => m.userName === member.userName ? member : m));
       })
     );
+  }
+
+  setMainPhoto(photoId: number) {
+
+    return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoId, {});
+  }
+
+  deletePhoto(photoId: number) {
+      
+      return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
   }
 
 }

@@ -23,12 +23,14 @@
             </ul>
 
             <div dropdown class="dropdown">
+                <img src="{{accountService.currentUser()?.photoUrl}}" 
+                alt="user main image"
+                >
                 <a dropdownToggle class="dropdown-toggle text-light">
                     Bonjour {{accountService.currentUser()?.username | titlecase}}
                 </a>
                 <div *dropdownMenu class="dropdown-menu">
-                    <a class="dropdown-item">Profil</a>
-                    <a routerLink="/member/edit" class="dropdown-item">Modifier mon Profil</a>
+                    <a routerLink="/member/edit" class="dropdown-item">Profil</a>
                     <a class="dropdown-item" (click)="logout()">Deconnexion</a>
                 </div>
             </div>
