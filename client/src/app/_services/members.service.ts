@@ -1,8 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { Member } from '../_models/member';
 import { of, tap } from 'rxjs';
+import { PaginatedResult } from '../_models/pagination';
+import { UserParams } from '../_models/userParam';
 
 @Injectable({
   providedIn: 'root'
@@ -12,26 +14,60 @@ export class MembersService {
 
   private http = inject(HttpClient);
   baseUrl = environment.apiUrl;
-
-  // TODO : Fix Signal Member (la page member se recharge a chaque fois, alors qu'elle devrait etre stockée en mémoire par le signal)
   members = signal<Member[]>([]);
 
-  // private accountService = inject(AccountService);
+  paginatedResult = signal<PaginatedResult<Member[]> | null>(null);
 
-  getMembers() {
+  memberCache = new Map();
 
-    return this.http.get<Member[]>(this.baseUrl + 'users').subscribe({
-      next: members => {
-        this.members.set(members);
+
+  getMembers(UserParams: UserParams) {
+
+    const response = this.memberCache.get(Object.values(UserParams).join('-'));
+
+    if(response) {
+      return this.setPaginatedResponse(response);
+    }
+    
+
+    let params = this.setPaginationHeader(UserParams.pageNumber, UserParams.pageSize);
+
+    params = params.append('minAge', UserParams.minAge);
+    params = params.append('maxAge', UserParams.maxAge);
+    params = params.append('gender', UserParams.gender);
+
+    return this.http.get<Member[]>(this.baseUrl + 'users', {observe: 'response', params}).subscribe({
+      next: response => {
+        this.memberCache.set(Object.values(UserParams).join('-'), response);
+        this.setPaginatedResponse(response);
+        
       }});
+  }
 
-      
+  private setPaginatedResponse(response: HttpResponse<Member[]>) {
+    this.paginatedResult.set(
+      {
+        result: response.body as Member[],
+        pagination: JSON.parse(response.headers.get('Pagination')!)
+      }
+    );
+  }
 
+  private setPaginationHeader(pageNumber: number, pageSize: number) {
+    let params = new HttpParams();
+    params = params.append('pageNumber', pageNumber);
+    params = params.append('pageSize', pageSize);
+    return params;
   }
 
   getMember(username: string) {
 
-    const member = this.members().find(x => x.userName === username);
+    console.log(this.memberCache.values());
+    const member: Member = [...this.memberCache.values()]
+      .reduce((arr, elem) => arr.concat(elem.body), [])
+      .find((m: Member) => m.userName === username);
+
+    // const member = this.members().find(x => x.userName === username);
     if(member !== undefined) return of(member);
 
     return this.http.get<Member>(this.baseUrl + 'users/' + username);

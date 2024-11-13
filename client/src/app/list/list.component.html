@@ -1,1 +1,121 @@
-<p>list works!</p>
+<!-- <dx-button text="Click me"
+(onClick)="helloWorld()"
+>
+</dx-button> -->
+
+<!-- <div class="row">
+
+    @for(member of memberService.paginatedResult()?.result; track member.id) {
+        
+        <code>{{member | json}}</code>
+
+    }
+
+</div> -->
+
+<div class="text-center mt-3">
+  <h2>{{memberService.paginatedResult()?.pagination?.totalItems}} résultats</h2>
+</div>
+
+<div class="container mt-3">
+  <form #form="ngForm" class="d-flex mb-3" (ngSubmit)="loadMembers()">
+      <div class="d-flex mx-2">
+          <label class="col-form-label" for="">Age Minimum: </label>
+          <input type="number" class="form-control ms-1" style="width: 70px;"
+          name="minAge"
+          [(ngModel)]="userParams.minAge"
+          >
+      </div>
+      <div class="d-flex mx-2">
+          <label class="col-form-label" for="">Age Maximum: </label>
+          <input type="number" class="form-control ms-1" style="width: 70px;"
+          name="maxAge"
+          [(ngModel)]="userParams.maxAge"
+          >
+      </div>
+
+      <div class="d-flex mx-2">
+          <label class="col-form-label" for="">Filtrer par genre: </label>
+          <select class="form-control ms-1" style="width: 130px;"
+          name="gender"
+          [(ngModel)]="userParams.gender"
+          >
+              @for (gender of genderFilterList; track gender.value){
+                  <option [value]="gender.value">{{gender.display}}</option>
+              }
+          </select>
+      </div>
+      <button class="btn btn-primary ms-1" type="submit">Filtrer</button>
+      <button (click)="resetFilters()" class="btn btn-primary ms-1" type="button">Reset</button>
+  </form>
+</div>
+
+<dx-data-grid
+  [dataSource]="memberService.paginatedResult()?.result || []">
+  <dxi-column
+    dataField="id"
+    caption="ID"
+  ></dxi-column>
+  <dxi-column
+    dataField="userName"
+    caption="Username"
+  ></dxi-column>
+  <dxi-column
+    dataField="knownAs"
+    caption="Pseudo"
+  ></dxi-column>
+  <dxi-column
+    dataField="gender"
+    caption="Genre"
+    cellTemplate="iconGender"
+  >
+  <div *dxTemplate="let data of 'iconGender'">  
+    <div *ngIf="data.value == 'female'">  
+      👩 Femme
+    </div>  
+    <div *ngIf="data.value == 'male'">  
+      👨 Homme
+    </div>  
+    <div *ngIf="data.value == 'pingouin'">  
+      🐧 Pingouin
+    </div>  
+  </div>  
+
+</dxi-column>
+  <dxi-column
+    dataField="age"
+    caption="Age">
+  </dxi-column>
+  <dxi-column
+    dataField="city"
+    caption="Ville">
+  </dxi-column>
+  <dxi-column
+    dataField="country"
+    caption="Pays">
+  </dxi-column>
+  <dxi-column
+    dataField="photoUrl"
+    caption="Photo">
+  </dxi-column>
+  <dxi-column
+    dataField="created"
+    caption="Membre depuis">
+  </dxi-column>
+  <dxi-column
+    dataField="lastActive"
+    caption="Dernière activité">
+  </dxi-column>
+  <dxi-column
+    dataField="introduction"
+    caption="Description">
+  </dxi-column>
+  <dxo-paging [pageSize]="20"></dxo-paging>
+  <dxo-search-panel
+  [visible]="true"
+  [highlightCaseSensitive]="true"
+></dxo-search-panel>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+</dx-data-grid>
+
+

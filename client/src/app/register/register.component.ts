@@ -2,7 +2,7 @@ import { Component, EventEmitter, inject, input, Input, OnInit, output, Output }
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
 import { ToastrService } from 'ngx-toastr';
-import { JsonPipe, NgFor } from '@angular/common';
+import { JsonPipe, NgFor, NgIf } from '@angular/common';
 import { TextInputComponent } from "../_forms/text-input/text-input.component";
 import { DatePickerComponent } from "../_forms/date-picker/date-picker.component";
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, JsonPipe, TextInputComponent, DatePickerComponent, NgFor],
+  imports: [ReactiveFormsModule, JsonPipe, TextInputComponent, DatePickerComponent, NgFor, NgIf],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -36,6 +36,7 @@ export class RegisterComponent implements OnInit {
   initializeForm() {
     this.registerForm = this.formBuilder.group({
       gender: ['pingouin'],
+      otherGender: ['female'],
       username: ['', Validators.required],
       knownAs: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
@@ -58,6 +59,9 @@ export class RegisterComponent implements OnInit {
 
   register() {
     const dateOfBirthDateOnly = this.getDateOnly(this.registerForm.get('dateOfBirth')?.value);
+    if(this.registerForm.get('gender')?.value == 'other') {
+      this.registerForm.patchValue({gender : this.registerForm.get('otherGender')?.value});
+    }
     this.registerForm.patchValue({dateOfBirth: dateOfBirthDateOnly});
     this.accountService.register(this.registerForm.value).subscribe({
       next: _ => {

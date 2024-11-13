@@ -4,13 +4,21 @@
 
     <div class="mb-3 d-flex justify-content-around">
         <label for="">Je suis :</label>
-        <label for="" class="form-check-label">
-            <input type="radio" class="form-check-label" value="pingouin" formControlName="gender"> un pingouin
+        <label for="pingouin" class="form-check-label">
+            <input type="radio" class="form-check-label" value="pingouin" id="pingouin" formControlName="gender"> un Pingouin
         </label>
-        <label for="" class="form-check-label">
-            <input type="radio" class="form-check-label" value="other" formControlName="gender"> autre
+        <label for="autre" class="form-check-label">
+            <input type="radio" class="form-check-label" value="other" id="autre" formControlName="gender"> Autre
         </label>
+    </div>
 
+    <div class="mb-3 d-flex justify-content-around" *ngIf="registerForm.value?.gender == 'other'">
+        <label for="female" class="form-check-label">
+            <input type="radio" class="form-check-label" value="female" id="female" formControlName="otherGender"> Une femme
+        </label>
+        <label for="male" class="form-check-label">
+            <input type="radio" class="form-check-label" value="male" id="male" formControlName="otherGender"> Un homme
+        </label>
     </div>
     
     <app-text-input
@@ -70,7 +78,3 @@
     </div>
 
 </form>
-
-{{registerForm.value | json}}
-<br>
-{{registerForm.valid}}

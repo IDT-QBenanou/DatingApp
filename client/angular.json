@@ -33,6 +33,7 @@
               "node_modules/bootswatch/dist/litera/bootstrap.min.css",
               "node_modules/ngx-spinner/animations/ball-spin-clockwise.css",
               "node_modules/ngx-toastr/toastr.css",
+              "node_modules/devextreme/dist/css/dx.light.css",
               "src/styles.css"
             ],
             "scripts": []
