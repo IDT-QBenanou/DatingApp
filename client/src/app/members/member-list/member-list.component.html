@@ -1,51 +1,83 @@
 <div class="row">
 
-    <div class="text-center mt-3">
-        <h2>{{memberService.paginatedResult()?.pagination?.totalItems}} résultats</h2>
-    </div>
+    @if(members_a_afficher == "liste") {
+        <div class="text-center mt-3">
+            <h2>Liste des membres
+                <br>{{memberService.paginatedResult()?.pagination?.totalItems}} résultats</h2>
+        </div>
+    } @else if(members_a_afficher == "likes") {
+        <div class="text-center mt-3">
+            <h2>Mes likes</h2>
+        </div>
+    }
+
+    
+    
 
     <div class="container mt-3">
-        <form #form="ngForm" class="d-flex mb-3" (ngSubmit)="loadMembers()">
-            <div class="d-flex mx-2">
-                <label class="col-form-label" for="">Age Minimum: </label>
-                <input type="number" class="form-control ms-1" style="width: 70px;"
-                name="minAge"
-                [(ngModel)]="userParams.minAge"
-                >
-            </div>
-            <div class="d-flex mx-2">
-                <label class="col-form-label" for="">Age Maximum: </label>
-                <input type="number" class="form-control ms-1" style="width: 70px;"
-                name="maxAge"
-                [(ngModel)]="userParams.maxAge"
-                >
-            </div>
 
-            <div class="d-flex mx-2">
-                <label class="col-form-label" for="">Filtrer par genre: </label>
-                <select class="form-control ms-1" style="width: 130px;"
-                name="gender"
-                [(ngModel)]="userParams.gender"
-                >
-                    @for (gender of genderFilterList; track gender.value){
-                        <option [value]="gender.value">{{gender.display}}</option>
-                    }
-                </select>
-            </div>
-            <button class="btn btn-primary ms-1" type="submit">Filtrer</button>
-            <button (click)="resetFilters()" class="btn btn-primary ms-1" type="button">Reset</button>
-        </form>
+        @if(members_a_afficher == "liste") {
+            <form #form="ngForm" class="d-flex mb-3" (ngSubmit)="loadMembers()">
+                <div class="d-flex mx-2">
+                    <label class="col-form-label" for="">Age Minimum: </label>
+                    <input type="number" class="form-control ms-1" style="width: 70px;"
+                    name="minAge"
+                    [(ngModel)]="userParams.minAge"
+                    >
+                </div>
+                <div class="d-flex mx-2">
+                    <label class="col-form-label" for="">Age Maximum: </label>
+                    <input type="number" class="form-control ms-1" style="width: 70px;"
+                    name="maxAge"
+                    [(ngModel)]="userParams.maxAge"
+                    >
+                </div>
+
+                <div class="d-flex mx-2">
+                    <label class="col-form-label" for="">Filtrer par genre: </label>
+                    <select class="form-control ms-1" style="width: 130px;"
+                    name="gender"
+                    [(ngModel)]="userParams.gender"
+                    >
+                        @for (gender of genderFilterList; track gender.value){
+                            <option [value]="gender.value">{{gender.display}}</option>
+                        }
+                    </select>
+                </div>
+                <button class="btn btn-primary ms-1" type="submit">Filtrer</button>
+                <button (click)="resetFilters()" class="btn btn-primary ms-1" type="button">Reset</button>
+
+                <button (click)="loadLikes('liked')" >Mes <i class="fa fa-heart" style="color: red;"></i></button>
+            </form>
+        } @else if(members_a_afficher == "likes") {
+            <button (click)="retourListe()" >Retour à la liste</button>
+            <button (click)="loadLikes('liked')" >Mes <i class="fa fa-heart" style="color: red;"></i></button>
+            <button (click)="loadLikes('likedBy')">Qui me <i class="fa fa-heart" style="color: red;"></i></button>
+            <button (click)="loadLikes('mutual')"><i class="fa fa-heart" style="color: red;"></i>Match<i class="fa fa-heart" style="color: red;"></i></button>
+
+        }
+       
     </div>
 
+    @if(members_a_afficher == "liste") {
         @for(member of memberService.paginatedResult()?.result; track member.id) {
             <div class="col-2">
                 <app-member-card [member]="member"></app-member-card>
             </div>
         }
+    }
 
+    @if(members_a_afficher == "likes") {
+
+        @for(member of members; track member.id) {
+            <div class="col-2">
+                <app-member-card [member]="member"></app-member-card>
+            </div>
+        }
+    }
 </div>
 
-@if(memberService.paginatedResult()?.pagination) {
+@if(memberService.paginatedResult()?.pagination && members_a_afficher == "liste") {
     <pagination 
     [boundaryLinks]="true"
     [totalItems]="memberService.paginatedResult()?.pagination!.totalItems" 
