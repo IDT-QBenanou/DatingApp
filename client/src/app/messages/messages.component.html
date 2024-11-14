@@ -1,1 +1,47 @@
-<p>messages works!</p>
+<div class="container mt-3">
+    <div class="d-flex">
+        <div class="btn-group">
+            <button class="btn btn-primary" (click)="loadMessages('Unread')">Messages non lus</button>
+            <button class="btn btn-primary" (click)="loadMessages('Inbox')">Messages reçus</button>
+            <button class="btn btn-primary" (click)="loadMessages('Outbox')">Messages envoyés</button>
+        </div>
+    </div>
+</div>
+<br><br>
+
+@if(!messageService.paginatedResult()?.result) {
+    <div class="container mt-3">
+        <div class="alert alert-info">Aucun message</div>
+    </div>
+}@else {
+
+    <table>
+
+        <tr>
+            <th>Id</th>
+            <th>Message</th>
+            <th>De</th>
+            <th>Pour</th>
+            <th>Lu ?</th>
+            <th>Date</th>
+        </tr>
+        <tr *ngFor="let message of messageService.paginatedResult()?.result">
+            <td>{{ message.id }}</td>
+            <td>{{ message.content }}</td>
+            <td routerLink="{{getRoute(message)}}" style="cursor: pointer;">
+                <img src="{{message.senderPhotoUrl}}" alt="">
+                {{ message.senderUsername }}
+            </td>
+            <td>
+                <img src="{{message.recipientPhotoUrl}}" alt="">
+                {{ message.recipientUsername }}
+            </td>
+            <td>
+                <span *ngIf="message.dateRead?.toString() === '0001-01-01T00:00:00'">Non lu</span>
+                <span *ngIf="message.dateRead?.toString() !== '0001-01-01T00:00:00'">Lu</span>
+            </td>
+            <td>{{ message.dateSent }}</td>
+        </tr>
+    </table>
+
+}
