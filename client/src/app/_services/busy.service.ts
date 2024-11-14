@@ -11,11 +11,18 @@ export class BusyService {
 
   busy() {
     this.busyRequestCount++;
-    this.spinnerService.show(undefined, {
-      type: 'ball-spin-clockwise',
-      bdColor: 'rgba(255,255,255,0.7)',
-      color: '#333333'
-    });
+
+    //get page url
+    
+    const pageUrl = window.location.href;
+
+    if(!pageUrl.includes('members')) {
+      this.spinnerService.show(undefined, {
+        type: 'ball-spin-clockwise',
+        bdColor: 'rgba(255,255,255,0.7)',
+        color: '#333333'
+      });
+    }
   }
 
   idle() {

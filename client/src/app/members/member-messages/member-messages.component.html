@@ -1,0 +1,37 @@
+<div class="card">
+    <div class="card-body">
+        @if(messages.length === 0) {
+            <p>Vous n'avez aucun message.</p>
+        } @else {
+            <ul class="chat">
+                @for(message of messages; track message.id) {
+
+                    <li>
+                      
+                            <span>
+                                <img src="{{message.senderPhotoUrl}}" alt="">
+                                {{message.senderUsername}}
+                            </span>
+                            {{message.content}}
+                    
+                    </li>
+                }
+                
+            </ul>
+        }
+
+    </div>
+    <div class="card-footer">
+        <div class="d-flex">
+            <form #messageForm="ngForm" (ngSubmit)="sendMessage()">
+                <div class="input-group">
+                    <input [(ngModel)]="messageContent" required type="text" class="form-control" name="messageContent">
+                    <div class="input-group-append">
+                        <button [disabled]="!messageForm.valid" class="btn btn-primary" type="submit">Envoyer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

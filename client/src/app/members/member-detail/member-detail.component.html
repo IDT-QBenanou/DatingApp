@@ -1,4 +1,4 @@
-@if(member) {
+<div *ngIf="member">
     <div class="row">
         <div class="col-4">
             <div class="card">
@@ -51,10 +51,14 @@
                     <gallery [items]="images" class="gallery"></gallery>
                 </tab>
                 <tab heading="Messages">
-                    <p>Messages TODO</p>
+                    <app-member-messages 
+                    [username]="member.userName"
+                    
+                    (updateMessages)="onUpdateMessages($event)"
+                ></app-member-messages>
                 </tab>
             </tabset>
         </div>
 
     </div>
-}
+</div>

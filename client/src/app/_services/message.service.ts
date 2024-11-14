@@ -22,6 +22,14 @@ export class MessageService {
          setPaginatedResponse(response, this.paginatedResult);
       });
   }
+
+  getMessageThread(username: string) {
+    return this.http.get<Message[]>(this.baseUrl + 'messages/thread/' + username);
+  }
+
+  sendMessage(username: string, content: string) {
+    return this.http.post<Message>(this.baseUrl + 'messages', {recipientUsername: username, content});
+  }
 }
 
 function setPaginationHeaders(pageNumber: number, pageSize: number) {
@@ -40,4 +48,6 @@ function setPaginatedResponse(response: HttpResponse<Message[]>, paginatedResult
     paginatedResult.set(new PaginatedResult<Message[]>(response.body, JSON.parse(pagination)));
   }
 }
+
+
 

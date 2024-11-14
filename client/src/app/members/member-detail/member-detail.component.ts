@@ -4,23 +4,33 @@ import { ActivatedRoute } from '@angular/router';
 import { Member } from '../../_models/member';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { GalleryItem, GalleryModule, ImageItem } from 'ng-gallery';
+import { MemberMessagesComponent } from "../member-messages/member-messages.component";
+import { NgIf } from '@angular/common';
+import { Message } from '../../_models/message';
+import { MessageService } from '../../_services/message.service';
 
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [TabsModule, GalleryModule],
+  imports: [TabsModule, GalleryModule, MemberMessagesComponent, NgIf],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.css'
 })
 export class MemberDetailComponent implements OnInit {
 
   private memberService = inject(MembersService);
+  private messageService = inject(MessageService);
   private route = inject(ActivatedRoute);
   member?: Member;
   images: GalleryItem[] = [];
+  messages: Message[] = [];
 
   ngOnInit(): void {
     this.loadMember();
+  }
+
+  onUpdateMessages(event: Message) {
+    this.messages.push(event);
   }
 
   loadMember(){
