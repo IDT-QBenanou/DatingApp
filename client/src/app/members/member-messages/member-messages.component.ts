@@ -27,21 +27,11 @@ export class MemberMessagesComponent implements OnInit {
   intervalId: any;
 
   ngOnInit(): void {
-    this.loadMessages();
-    
+       
     const user = this.accountService.currentUser();
     if(!user) return;
 
     this.lookForNewMessages(user);
-  }
-
-  loadMessages() {
-    this.messageService.getMessageThread(this.username())
-      .subscribe({
-        next: (messages: Message[]) => {
-          this.messages = messages;
-        }
-      });
   }
 
   sendMessage() {
@@ -52,27 +42,12 @@ export class MemberMessagesComponent implements OnInit {
     this.messageForm?.reset();
   }
 
-  // toutes les 5 secondes, regarde si il y a des nouveaux messages
-  // si il y en a, les affiche
-
   lookForNewMessages(user: any) {
-
-    // this.intervalId = setInterval(() => {
-    //   this.loadMessages();
-    //   console.log('Looking for new messages');
-    // }, 5000
-    // );
-    // Cancel the interval when the component is destroyed
-    
-    // anuller l'interval
 
     this.messageService.createHubConnection(user, this.username());
   }
 
   ngOnDestroy(): void {
-    // if (this.intervalId) {
-    // clearInterval(this.intervalId);
-    // }
 
     this.messageService.stopHubConnection();
   }
