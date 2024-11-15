@@ -3,12 +3,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Identity;
 
 namespace API;
 
-public class TokenService(IConfiguration config) : ITokenService
+public class TokenService(IConfiguration config, UserManager<AppUser> userManager) : ITokenService
 {
-	public string CreateToken(AppUser user)
+	public async Task<string> CreateToken(AppUser user)
 	{
 		var tokenKey = config["TokenKey"] ?? throw new Exception("TokenKey is missing from appsettings.json");
 
@@ -16,11 +17,16 @@ public class TokenService(IConfiguration config) : ITokenService
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
 
+        if(user.UserName == null) throw new Exception("User must have a username");
+
         var claims = new List<Claim>
         {
             new (ClaimTypes.Name, user.UserName),
             new (ClaimTypes.NameIdentifier, user.Id.ToString())
         };
+
+        var roles = await userManager.GetRolesAsync(user);
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 

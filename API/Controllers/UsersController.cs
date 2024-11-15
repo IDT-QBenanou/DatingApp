@@ -16,6 +16,7 @@ public class UsersController(
     IPhotoService photoService) 
     : BaseApiController
 {
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
     {
@@ -42,7 +43,10 @@ public class UsersController(
     [HttpPut]
     public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
     {
-        var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        // var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var username = User.FindFirst(ClaimTypes.Name)?.Value;
+        
+
         if(username == null) return Unauthorized();
 
         var user = await userRepository.GetUserByUsernameAsync(username);

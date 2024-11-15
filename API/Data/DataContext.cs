@@ -1,11 +1,23 @@
 using API.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Data
 {
-    public class DataContext(DbContextOptions options) : DbContext(options)
+    public class DataContext(DbContextOptions options) : 
+    IdentityDbContext<
+    AppUser, 
+    AppRole, 
+    int,
+    IdentityUserClaim<int>, 
+    AppUserRole,
+    IdentityUserLogin<int>, 
+    IdentityRoleClaim<int>,
+    IdentityUserToken<int>
+    >(options)
     {   
-        public DbSet<AppUser> Users { get; set; }
+        // public DbSet<AppUser> Users { get; set; }
         public DbSet<UserLike> Likes { get; set; }
 
         public DbSet<Message> Messages { get; set; }
@@ -14,6 +26,18 @@ namespace API.Data
         {
             base.OnModelCreating(builder);
             
+            builder.Entity<AppUser>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.User)
+                .HasForeignKey(fk => fk.UserId)
+                .IsRequired();
+            
+            builder.Entity<AppRole>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(r => r.Role)
+                .HasForeignKey(fk => fk.RoleId)
+                .IsRequired();
+
             builder.Entity<UserLike>()
                 .HasKey(key => new { key.SourceUserId, key.TargetUserId });
 
