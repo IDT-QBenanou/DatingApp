@@ -3,11 +3,12 @@ import { MessageService } from '../../_services/message.service';
 import { Message } from '../../_models/message';
 import { FormsModule, NgForm } from '@angular/forms';
 import { BusyService } from '../../_services/busy.service';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-member-messages',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, NgFor],
   templateUrl: './member-messages.component.html',
   styleUrl: './member-messages.component.css'
 })
@@ -16,7 +17,6 @@ export class MemberMessagesComponent implements OnInit {
   @ViewChild('messageForm') messageForm?: NgForm;
 
   private messageService = inject(MessageService);
-  private busyService = inject(BusyService);
   username = input.required<string>();
   messages: Message[] = [];
   messageContent = '';
@@ -54,20 +54,20 @@ export class MemberMessagesComponent implements OnInit {
 
   lookForNewMessages() {
 
-    this.intervalId = setInterval(() => {
-      this.loadMessages();
-      console.log('Looking for new messages');
-    }, 5000
-    );
+    // this.intervalId = setInterval(() => {
+    //   this.loadMessages();
+    //   console.log('Looking for new messages');
+    // }, 5000
+    // );
     // Cancel the interval when the component is destroyed
     
     // anuller l'interval
   }
 
   ngOnDestroy(): void {
-    if (this.intervalId) {
-    clearInterval(this.intervalId);
-    }
+    // if (this.intervalId) {
+    // clearInterval(this.intervalId);
+    // }
   }
 
 }

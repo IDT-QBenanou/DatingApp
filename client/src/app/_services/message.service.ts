@@ -16,6 +16,7 @@ export class MessageService {
 
   getMessages(pageNumber: number, pageSize: number, container: string) {
     let params = setPaginationHeaders(pageNumber, pageSize);
+    params = params.set('Container', container);
     
     return this.http.get<Message[]>(this.baseUrl + 'messages', {observe: 'response', params})
       .subscribe(response => {
@@ -29,6 +30,10 @@ export class MessageService {
 
   sendMessage(username: string, content: string) {
     return this.http.post<Message>(this.baseUrl + 'messages', {recipientUsername: username, content});
+  }
+
+  deleteMessage(id: number) {
+    return this.http.delete(this.baseUrl + 'messages/' + id);
   }
 }
 

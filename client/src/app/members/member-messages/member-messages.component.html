@@ -3,20 +3,15 @@
         @if(messages.length === 0) {
             <p>Vous n'avez aucun message.</p>
         } @else {
-            <ul class="chat">
-                @for(message of messages; track message.id) {
-
-                    <li>
+            <ul class="chat">       
+                    <li *ngFor="let message of messages.reverse()">
                       
                             <span>
                                 <img src="{{message.senderPhotoUrl}}" alt="">
                                 {{message.senderUsername}}
                             </span>
-                            {{message.content}}
-                    
+                            {{message.content}}            
                     </li>
-                }
-                
             </ul>
         }
 

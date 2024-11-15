@@ -18,3 +18,10 @@ img {
     width: 50px;
     border-radius: 50px;
 }
+
+ul {
+    height: 60vh;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column-reverse;
+}

@@ -30,8 +30,6 @@ export class MemberListComponent implements OnInit {
     genderFilterList = [{value: 'male', display: 'Hommes'}, {value: 'female', display: 'Femmes'}, {value: 'pingouin', display: 'Pingouins'}];
 
     ngOnInit(): void {
-
-       // TODO : Fix Signal Member (la page member se recharge a chaque fois, alors qu'elle devrait etre stockée en mémoire par le signal)
       this.loadMembers();
     }
 

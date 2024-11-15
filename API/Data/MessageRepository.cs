@@ -36,9 +36,12 @@ public class MessageRepository(DataContext context, IMapper mapper) : IMessageRe
 
         query = messageParams.Container switch
         {
-            "Inbox" => query.Where(u => u.Recipient.UserName == messageParams.Username),
-            "Outbox" => query.Where(u => u.Sender.UserName == messageParams.Username),
-            _ => query.Where(u => u.Recipient.UserName == messageParams.Username && u.DateRead == dateNull)
+            "Inbox" => query.Where(u => u.Recipient.UserName == messageParams.Username 
+            && u.RecipientDeleted == false),
+            "Outbox" => query.Where(u => u.Sender.UserName == messageParams.Username 
+            && u.SenderDeleted == false),
+            _ => query.Where(u => u.Recipient.UserName == messageParams.Username && u.DateRead == dateNull 
+            && u.RecipientDeleted == false)
         };
 
         var messages = query.ProjectTo<MessageDto>(mapper.ConfigurationProvider);
@@ -51,10 +54,13 @@ public class MessageRepository(DataContext context, IMapper mapper) : IMessageRe
         var message = await context.Messages
             .Include(s => s.Sender).ThenInclude(p => p.Photos)
             .Include(r => r.Recipient).ThenInclude(p => p.Photos)
-            .Where(m => m.Recipient.UserName == currentUsername && m.Sender.UserName == recipientUsername
-                || m.Recipient.UserName == recipientUsername && m.Sender.UserName == currentUsername)
+            .Where(m => m.Recipient.UserName == currentUsername 
+                && m.RecipientDeleted == false
+                && m.Sender.UserName == recipientUsername
+                || m.Recipient.UserName == recipientUsername 
+                && m.SenderDeleted == false
+                && m.Sender.UserName == currentUsername)
             .OrderBy(m => m.DateSent)
-            .ProjectTo<MessageDto>(mapper.ConfigurationProvider)
             .ToListAsync();
 
         DateTime dateNull = DateTime.Parse("0001-01-01T00:00:00");
@@ -65,8 +71,8 @@ public class MessageRepository(DataContext context, IMapper mapper) : IMessageRe
             foreach(var unreadMessage in unreadMessages)
             {
                 unreadMessage.DateRead = DateTime.UtcNow;
-                await context.SaveChangesAsync();
             }
+             await context.SaveChangesAsync();
 
         }
 
