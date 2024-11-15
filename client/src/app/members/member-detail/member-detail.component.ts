@@ -20,19 +20,13 @@ import { PresenceService } from '../../_services/presence.service';
 export class MemberDetailComponent implements OnInit {
 
   private memberService = inject(MembersService);
-  private messageService = inject(MessageService);
   presenceService = inject(PresenceService);
   private route = inject(ActivatedRoute);
   member?: Member;
   images: GalleryItem[] = [];
-  messages: Message[] = [];
 
   ngOnInit(): void {
     this.loadMember();
-  }
-
-  onUpdateMessages(event: Message) {
-    this.messages.push(event);
   }
 
   loadMember(){

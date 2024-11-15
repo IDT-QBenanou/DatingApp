@@ -23,11 +23,9 @@ export class MemberMessagesComponent implements OnInit {
   messages: Message[] = [];
   messageContent = '';
   updateMessages = output<Message>();
-  webSocketService: any;
-  intervalId: any;
 
   ngOnInit(): void {
-       
+
     const user = this.accountService.currentUser();
     if(!user) return;
 
