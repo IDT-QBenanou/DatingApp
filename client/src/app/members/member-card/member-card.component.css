@@ -26,3 +26,17 @@
 .card-img-wrapper:hover img {
     transform: scale(1);
 }
+
+@keyframes fa-blink {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.4;
+    }
+}
+
+.is-online {
+    animation: fa-blink 1s linear infinite;
+    color: green;
+}

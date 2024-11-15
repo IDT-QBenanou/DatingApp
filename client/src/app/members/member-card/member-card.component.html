@@ -16,6 +16,9 @@
     
     <div class="card-body p1">
         <h6 class="card-title">
+            <span [class.is-online]="isOnline()">
+                <i class="fa fa-user me-2"></i>
+            </span>
             {{member().knownAs}} -
             {{member().age}} ans
             <br>

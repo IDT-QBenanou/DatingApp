@@ -4,6 +4,7 @@ import { Message } from '../../_models/message';
 import { FormsModule, NgForm } from '@angular/forms';
 import { BusyService } from '../../_services/busy.service';
 import { NgFor } from '@angular/common';
+import { AccountService } from '../../_services/account.service';
 
 @Component({
   selector: 'app-member-messages',
@@ -16,7 +17,8 @@ export class MemberMessagesComponent implements OnInit {
  
   @ViewChild('messageForm') messageForm?: NgForm;
 
-  private messageService = inject(MessageService);
+  messageService = inject(MessageService);
+  private accountService = inject(AccountService);
   username = input.required<string>();
   messages: Message[] = [];
   messageContent = '';
@@ -26,7 +28,11 @@ export class MemberMessagesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadMessages();
-    this.lookForNewMessages();
+    
+    const user = this.accountService.currentUser();
+    if(!user) return;
+
+    this.lookForNewMessages(user);
   }
 
   loadMessages() {
@@ -39,20 +45,17 @@ export class MemberMessagesComponent implements OnInit {
   }
 
   sendMessage() {
-    this.messageService.sendMessage(this.username(), this.messageContent)
-      .subscribe({
-        next: (message: Message) => {
-          this.updateMessages.emit(message);
-          this.messageForm?.reset();
-          this.loadMessages();
-        }
-      });
+    this.messageService.sendMessage(this.username(), this.messageContent).then(() => {
+      this.messageForm?.reset();
+    });
+
+    this.messageForm?.reset();
   }
 
   // toutes les 5 secondes, regarde si il y a des nouveaux messages
   // si il y en a, les affiche
 
-  lookForNewMessages() {
+  lookForNewMessages(user: any) {
 
     // this.intervalId = setInterval(() => {
     //   this.loadMessages();
@@ -62,12 +65,16 @@ export class MemberMessagesComponent implements OnInit {
     // Cancel the interval when the component is destroyed
     
     // anuller l'interval
+
+    this.messageService.createHubConnection(user, this.username());
   }
 
   ngOnDestroy(): void {
     // if (this.intervalId) {
     // clearInterval(this.intervalId);
     // }
+
+    this.messageService.stopHubConnection();
   }
 
 }

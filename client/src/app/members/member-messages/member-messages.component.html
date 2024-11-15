@@ -1,10 +1,10 @@
 <div class="card">
     <div class="card-body">
-        @if(messages.length === 0) {
+        @if(messageService.messageThread().length === 0) {
             <p>Vous n'avez aucun message.</p>
         } @else {
             <ul class="chat">       
-                    <li *ngFor="let message of messages.reverse()">
+                    <li *ngFor="let message of messageService.messageThread().reverse()">
                       
                             <span>
                                 <img src="{{message.senderPhotoUrl}}" alt="">

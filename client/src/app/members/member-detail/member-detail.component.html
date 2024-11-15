@@ -4,6 +4,9 @@
             <div class="card">
                 <img [src]="member.photoUrl || './assets/user.jpg'" [alt]="member.knownAs" class="card-img img-thumbnail">
                 <div class="card-body">
+                    @if(presenceService.onlineUsers().includes(member.userName)) {
+                        <span class="badge bg-success">En Ligne</span>
+                    }
                     <div>
                         <strong>{{member.knownAs}}</strong>
                         <p>{{member.gender}}</p>

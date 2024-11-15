@@ -23,6 +23,8 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IPhotoService, PhotoService>();
         services.AddScoped<LogUserActivity>();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddSignalR();
+        services.AddSingleton<PresenceTracker>();
 
         return services;
 
