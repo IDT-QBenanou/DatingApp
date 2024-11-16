@@ -68,7 +68,12 @@ export class MessageService {
   async sendMessage(username: string, content: string) {
     // return this.http.post<Message>(this.baseUrl + 'messages', {recipientUsername: username, content});
 
-    return this.hubConnection?.invoke('SendMessage', {recipientUsername: username, content})
+    if (this.hubConnection?.state === 'Connected') {
+      return this.hubConnection.invoke('SendMessage', {recipientUsername: username, content});
+    } else {
+      console.error('Hub connection is not established.');
+      return Promise.reject('Hub connection is not established.');
+    }
   }
 
   deleteMessage(id: number) {
